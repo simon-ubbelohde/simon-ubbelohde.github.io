@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio - Simon Ubbelohde</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        stone: {
+                            950: '#111110',
+                            900: '#181816',
+                            850: '#1f1f1c',
+                            800: '#292825',
+                            700: '#3d3b37',
+                            400: '#a19e95',
+                            300: '#d6cfc2',
+                            100: '#f3f1ec',
+                            50: '#faf8f5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+  <style>
+    :root {
+      --bg-primary: #F6F5F0;
+      --bg-secondary: #EFECE6;
+      --bg-card: #FFFFFF;
+      --text-primary: #161615;
+      --text-secondary: #575652;
+      --text-muted: #85837D;
+      --border-color: #DFDCD4;
+      --accent-soft: #E5E0D5;
+    }
+
+    html.dark {
+      --bg-primary: #111110;
+      --bg-secondary: #181816;
+      --bg-card: #1C1C1A;
+      --text-primary: #F3F1EC;
+      --text-secondary: #A6A39B;
+      --text-muted: #6E6C66;
+      --border-color: #2A2926;
+      --accent-soft: #252421;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .surface-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .surface-card:hover {
+      border-color: var(--text-muted);
+    }
+
+    .surface-secondary {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+    }
+
+    .text-sec { color: var(--text-secondary); }
+    .text-mut { color: var(--text-muted); }
+    .border-sub { border-color: var(--border-color); }
+
+    .exp-photo {
+      filter: grayscale(20%) contrast(1.03);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    }
+    .group:hover .exp-photo {
+      transform: scale(1.03);
+      filter: grayscale(0%) contrast(1.05);
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-stone-500/20">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-200">
+    <div class="surface-card px-4 py-2.5 rounded-lg shadow-xl flex items-center gap-2.5 text-xs font-mono">
+      <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
+      <span id="toast-msg">Copied to clipboard</span>
+    </div>
+  </div>
+
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-primary)]/85 border-b border-sub">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-3 group">
+        <span class="w-8 h-8 rounded-lg surface-secondary flex items-center justify-center font-mono text-xs font-semibold tracking-tight">
+          SU
+        </span>
+        <div class="flex flex-col">
+          <span class="text-sm font-semibold tracking-tight leading-none">Simon Ubbelohde</span>
+          <span class="text-[11px] font-mono text-mut mt-1">~/portfolio</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1 font-mono text-xs">
+        <a href="#whoami" class="px-3 py-1.5 rounded-md text-sec hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors">$whoami</a>
+        <a href="#history" class="px-3 py-1.5 rounded-md text-sec hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors">$history</a>
+        <a href="#experiences" class="px-3 py-1.5 rounded-md text-sec hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors">~/experiences</a>
+        <a href="#projects" class="px-3 py-1.5 rounded-md text-sec hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors">~/projects</a>
+        <a href="#certs" class="px-3 py-1.5 rounded-md text-sec hover:text-[var(--text-primary)] hover:bg-[var(--accent-soft)] transition-colors">~/certs</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleTheme()" class="p-2 rounded-lg surface-card text-sec hover:text-[var(--text-primary)]" title="Switch Theme" aria-label="Switch Theme">
+          <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+        </button>
+        <a href="Ubbelohde%20Simon%20-%20CV.pdf" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] text-xs font-medium flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+          <span>Open CV (PDF)</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="max-w-6xl mx-auto px-5 sm:px-8 pt-12 pb-24 space-y-28">
+
+    <!-- HERO SECTION -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pt-4">
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full surface-secondary text-xs font-mono text-sec">
+          <span class="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400"></span>
+          <span>14-week Internship · Feb 1 – May 7, 2027</span>
+        </div>
+
+        <div class="space-y-2">
+          <h1 class="text-4xl sm:text-6xl font-semibold tracking-tight leading-[1.08]">
+            Simon <span class="font-serif italic font-normal">Ubbelohde</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-sec font-normal">
+            Cybersecurity Student @ <span class="text-[var(--text-primary)] font-medium">Hénallux (IESN)</span>
+          </p>
+        </div>
+
+        <!-- Exact Bio from Ubbelohde Simon - CV.pdf -->
+        <p class="text-sec leading-relaxed max-w-2xl text-base">
+          Cybersecurity student passionate about offensive security, vulnerability assessment, and defensive engineering. I actively sharpen my skills through CTFs and technical platforms such as TryHackMe and Root-Me. Curious, autonomous, and detail-oriented, I aim to leverage a practical attack/defense mindset to evaluate system robustness, secure complex infrastructures, and contribute to high-impact technical consulting projects.
+        </p>
+
+        <!-- Action Buttons: Direct links to exact PDF -->
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <button onclick="openFileModal('Ubbelohde Simon - CV.pdf', 'Simon Ubbelohde — Official CV (PDF)', 'pdf')" class="px-5 py-2.5 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] text-sm font-medium flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <i data-lucide="eye" class="w-4 h-4"></i>
+            <span>Preview CV</span>
+          </button>
+          <a href="Ubbelohde%20Simon%20-%20CV.pdf" download="Ubbelohde Simon - CV.pdf" class="px-4 py-2.5 rounded-lg surface-card text-sm font-medium flex items-center gap-2">
+            <i data-lucide="download" class="w-4 h-4 text-sec"></i>
+            <span>Download CV (.pdf)</span>
+          </a>
+          <a href="https://www.linkedin.com/in/simon-ubbelohde/" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-lg surface-card text-sm font-medium flex items-center gap-2">
+            <i data-lucide="external-link" class="w-4 h-4 text-sec"></i>
+            <span>LinkedIn</span>
+          </a>
+        </div>
+
+        <!-- Quick Contact Variables (maikotourre.be style) -->
+        <div class="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl">
+          <button onclick="copyValue('simon.ubbelohde@gmail.com', 'Email copied')" class="surface-card p-3 rounded-lg text-left flex items-center justify-between group">
+            <div class="truncate pr-2">
+              <div class="text-[11px] font-mono text-mut">$email</div>
+              <div class="text-xs font-mono mt-0.5 truncate">simon.ubbelohde@gmail.com</div>
+            </div>
+            <i data-lucide="copy" class="w-3.5 h-3.5 text-mut group-hover:text-[var(--text-primary)] shrink-0"></i>
+          </button>
+
+          <button onclick="copyValue('+32 470 74 39 28', 'Phone number copied')" class="surface-card p-3 rounded-lg text-left flex items-center justify-between group">
+            <div>
+              <div class="text-[11px] font-mono text-mut">$phone</div>
+              <div class="text-xs font-mono mt-0.5">+32 470 74 39 28</div>
+            </div>
+            <i data-lucide="copy" class="w-3.5 h-3.5 text-mut group-hover:text-[var(--text-primary)] shrink-0"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Sober Profile Summary Card -->
+      <div class="lg:col-span-5">
+        <div class="surface-card rounded-2xl p-6 sm:p-7 space-y-6">
+          <div class="flex items-center justify-between border-b border-sub pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full surface-secondary flex items-center justify-center font-serif italic text-xl">
+                S
+              </div>
+              <div>
+                <h2 class="text-sm font-semibold">Simon Ubbelohde</h2>
+                <p class="text-xs font-mono text-mut">Belgium</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-mono px-2.5 py-1 rounded surface-secondary text-sec">
+              Cym0n
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="surface-secondary p-3.5 rounded-xl">
+              <div class="text-mut font-mono text-[11px]">CTF PLAYER</div>
+              <div class="text-base font-semibold mt-1">CSCBE, UTCTF</div>
+              <div class="text-mut text-[11px] mt-0.5">Offensive Security</div>
+            </div>
+            <div class="surface-secondary p-3.5 rounded-xl">
+              <div class="text-mut font-mono text-[11px]">PLATFORMS</div>
+              <div class="text-base font-semibold mt-1">50+ Rooms</div>
+              <div class="text-mut text-[11px] mt-0.5">TryHackMe · Root-Me</div>
+            </div>
+            <div class="surface-secondary p-3.5 rounded-xl">
+              <div class="text-mut font-mono text-[11px]">INTERNATIONAL</div>
+              <div class="text-base font-semibold mt-1">Halmstad, SE</div>
+              <div class="text-mut text-[11px] mt-0.5">CTF Co-Creation</div>
+            </div>
+            <div class="surface-secondary p-3.5 rounded-xl">
+              <div class="text-mut font-mono text-[11px]">NATIONAL EVENT</div>
+              <div class="text-base font-semibold mt-1">HtG 2026</div>
+              <div class="text-mut text-[11px] mt-0.5">Hack The Government</div>
+            </div>
+          </div>
+
+          <div class="space-y-2 pt-1 text-xs font-mono text-sec">
+            <div class="flex justify-between py-1 border-b border-sub">
+              <span class="text-mut">Languages</span>
+              <span>FR (Native) · EN (B2) · NL (A1)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-sub">
+              <span class="text-mut">Root-Me Rank</span>
+              <span>Top 35,000</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-mut">Mobility</span>
+              <span>B-Level Driver's License + Car</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- $WHOAMI & SKILLS -->
+    <section id="whoami" class="space-y-8 scroll-mt-24">
+      <div class="border-b border-sub pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono text-mut uppercase tracking-wider">01 / Profile & Stack</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mt-1 font-mono">$whoami</h2>
+        </div>
+        <p class="text-xs font-mono text-mut">Attack / Defense Engineering Mindset</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-5 space-y-4 text-sec text-sm leading-relaxed">
+          <p>
+            I am a final-year <strong class="text-[var(--text-primary)] font-medium">Bachelor's student in Cybersecurity at Hénallux (IESN)</strong> in Namur, Belgium. My daily work revolves around understanding how modern systems fail—and how to harden and monitor them effectively.
+          </p>
+          <p>
+            Through regular Capture The Flag competitions (<strong class="text-[var(--text-primary)] font-medium">CSCBE</strong>, <strong class="text-[var(--text-primary)] font-medium">UTCTF</strong>) and national events like <strong class="text-[var(--text-primary)] font-medium">Hack The Government 2026</strong>, I practice web exploitation, network analysis, containerization, and SIEM detection engineering.
+          </p>
+          <p>
+            Outside the terminal, I play ice hockey, have worked at Planète Pizza since 2024, and work on personal projects for fun.
+          </p>
+        </div>
+
+        <!-- Exact Skills from CV -->
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Linux & Unix</div>
+            <div class="text-sm font-medium mt-1">Debian, Kali, Red Hat</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Windows Server</div>
+            <div class="text-sm font-medium mt-1">Active Directory, GPO</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">CTFs & Pentesting</div>
+            <div class="text-sm font-medium mt-1">Burp Suite, Wireshark</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Networking</div>
+            <div class="text-sm font-medium mt-1">Cisco, Palo Alto, pfSense</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Coding</div>
+            <div class="text-sm font-medium mt-1">Python, C, Bash, PowerShell</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Web Security</div>
+            <div class="text-sm font-medium mt-1">OWASP Top 10, SQLi</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Virtualisation</div>
+            <div class="text-sm font-medium mt-1">Docker, Podman</div>
+          </div>
+          <div class="surface-card p-4 rounded-xl">
+            <div class="text-xs font-mono text-mut">Cryptography</div>
+            <div class="text-sm font-medium mt-1">Fundamentals, Protocols</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- $HISTORY (EDUCATION & WORK) -->
+    <section id="history" class="space-y-8 scroll-mt-24">
+      <div class="border-b border-sub pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono text-mut uppercase tracking-wider">02 / Academic & Work Path</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mt-1 font-mono">$history</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="surface-card rounded-xl p-6 space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono text-mut">
+            <span>2024 – 2027</span>
+            <span class="px-2 py-0.5 rounded surface-secondary">In Progress</span>
+          </div>
+          <h3 class="text-base font-semibold">Bachelor's Degree in Cybersecurity</h3>
+          <p class="text-xs font-mono text-sec">Hénallux (IESN) — Namur, Belgium</p>
+          <p class="text-xs text-sec leading-relaxed">
+            Offensive & defensive security, network architecture, Linux/Windows administration, incident detection, and containerization.
+          </p>
+        </div>
+
+        <div class="surface-card rounded-xl p-6 space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono text-mut">
+            <span>Since 2024</span>
+            <span class="px-2 py-0.5 rounded surface-secondary">Student Job</span>
+          </div>
+          <h3 class="text-base font-semibold">Delivery Driver & Team Member</h3>
+          <p class="text-xs font-mono text-sec">Planète Pizza</p>
+          <p class="text-xs text-sec leading-relaxed">
+            Cash management, customer relations, and delivery logistics at Planète Pizza.
+          </p>
+        </div>
+
+        <div class="surface-card rounded-xl p-6 space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono text-mut">
+            <span>2018 – 2024</span>
+            <span class="px-2 py-0.5 rounded surface-secondary">Graduated</span>
+          </div>
+          <h3 class="text-base font-semibold">CESS Math & Sciences</h3>
+          <p class="text-xs font-mono text-sec">Collège Abbé Noël — Belgium</p>
+          <p class="text-xs text-sec leading-relaxed">
+            Upper secondary education diploma with a strong focus on mathematics and analytical sciences.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ~/EXPERIENCES (WITH PHOTOGRAPHY LIKE MAIKOTOURRE.BE) -->
+    <section id="experiences" class="space-y-8 scroll-mt-24">
+      <div class="border-b border-sub pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono text-mut uppercase tracking-wider">03 / Fieldwork, CTFs & International</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mt-1 font-mono">$ls ~/experiences</h2>
+        </div>
+        <p class="text-xs font-mono text-mut">Competitions, International Collaboration & Hackathons</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+
+        <!-- 1. Sweden Halmstad CTF Collaboration -->
+        <article class="surface-card rounded-2xl overflow-hidden group flex flex-col lg:col-span-2">
+          <div class="h-44 overflow-hidden relative bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1509356843151-3e7d96241e11?auto=format&fit=crop&w=900&q=80" alt="Sweden Halmstad Collaboration" class="w-full h-full object-cover exp-photo" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[11px] font-mono">
+              International · Sweden
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-mono text-mut">Halmstad University · December 2026</div>
+              <h3 class="text-base font-semibold leading-snug">CTF Co-Creation in Sweden (Halmstad)</h3>
+              <p class="text-xs text-sec leading-relaxed">
+                Academic trip to Sweden to design, build, and deploy a full Capture The Flag (CTF) competition in direct collaboration with cybersecurity students from Halmstad University.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-sub text-[11px] font-mono text-mut">
+              <span>#CTF-Design</span><span>#Halmstad</span><span>#Infrastructure</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Hack The Government 2026 -->
+        <article class="surface-card rounded-2xl overflow-hidden group flex flex-col lg:col-span-2">
+          <div class="h-44 overflow-hidden relative bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80" alt="Hack The Government 2026" class="w-full h-full object-cover exp-photo" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[11px] font-mono">
+              Offensive Event · CCB
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-mono text-mut">November 2026 · Belgium</div>
+              <h3 class="text-base font-semibold leading-snug">Hack The Government 2026</h3>
+              <p class="text-xs text-sec leading-relaxed">
+                Selected participant in the national ethical hacking event assessing the security posture and resilience of public-sector infrastructures under real-world rules of engagement.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-sub text-[11px] font-mono text-mut">
+              <span>#Pentesting</span><span>#WebSec</span><span>#RedTeam</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Cyber Security Challenge Belgium (CSCBE) & UTCTF -->
+        <article class="surface-card rounded-2xl overflow-hidden group flex flex-col lg:col-span-2">
+          <div class="h-44 overflow-hidden relative bg-stone-900">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=900&q=80" alt="CSCBE & UTCTF" class="w-full h-full object-cover exp-photo" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[11px] font-mono">
+              National & International CTFs
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-mono text-mut">2025 & 2026 Editions</div>
+              <h3 class="text-base font-semibold leading-snug">CSCBE (2025 & 2026) & University of Texas (UTCTF 2026)</h3>
+              <p class="text-xs text-sec leading-relaxed">
+                Active competitor in the Cyber Security Challenge Belgium and UTCTF (University of Texas). Solved multi-domain tasks in Web, Cryptography, Forensics, Reverse Engineering, Pwn, and Misc using Kali Linux.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 pt-2 border-t border-sub text-[11px] font-mono text-mut">
+              <span>#CSCBE</span><span>#UTCTF</span><span>#KaliLinux</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Citizens of Wallonia Hackathon -->
+        <article class="surface-card rounded-2xl overflow-hidden group flex flex-col lg:col-span-2 lg:col-start-2">
+          <div class="h-44 overflow-hidden relative bg-stone-900">
+            <img src="hackathon.jpg" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80'" alt="Citizens of Wallonia Hackathon" class="w-full h-full object-cover exp-photo" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[11px] font-mono">
+              Hackathon · Smart Cities
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-mono text-mut">April 4–6, 2025 · Charleroi</div>
+              <h3 class="text-base font-semibold leading-snug">Citizens of Wallonia — 10th Edition</h3>
+              <p class="text-xs text-sec leading-relaxed">
+                48-hour hackathon organized by FuturoCité dedicated to smart territories. Designed and pitched an innovative prototype through intensive teamwork.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-sub flex items-center justify-between">
+              <span class="text-[11px] font-mono text-mut">FuturoCité</span>
+              <button onclick="openFileModal('Hackaton_COW.pdf', 'Citizens of Wallonia — Official Certificate (Hackaton_COW.pdf)', 'pdf')" class="text-xs font-mono underline hover:opacity-80">
+                View PDF →
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. 1st Place Academic / CISC CTF -->
+        <article class="surface-card rounded-2xl overflow-hidden group flex flex-col lg:col-span-2">
+          <div class="h-44 overflow-hidden relative bg-stone-900">
+            <img src="Cert.png" onerror="this.src='https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=900&q=80'" alt="1st Place CISC CTF" class="w-full h-full object-cover exp-photo" />
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/70 backdrop-blur-sm text-white text-[11px] font-mono">
+              Rank #01 · Winner
+            </span>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="text-xs font-mono text-mut">March 25, 2026 · IESN / CISC</div>
+              <h3 class="text-base font-semibold leading-snug">1st Place — Academic CTF (IESN / CISC)</h3>
+              <p class="text-xs text-sec leading-relaxed">
+                Ranked #01 with team <em>GrepMyBeer</em> (handle <code>Cymon21</code>), scoring 5,500 team points and 1,450 personal points across Web, Crypto, Forensics, Reverse, and Pwn challenges.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-sub flex items-center justify-between">
+              <span class="text-[11px] font-mono text-mut">GrepMyBeer · #01</span>
+              <button onclick="openFileModal('Cert.png', 'CISC CTF — 1st Place Certificate (Cert.png)', 'img')" class="text-xs font-mono underline hover:opacity-80">
+                View Certificate →
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ~/PROJECTS -->
+    <section id="projects" class="space-y-8 scroll-mt-24">
+      <div class="border-b border-sub pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono text-mut uppercase tracking-wider">04 / Personal Engineering</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mt-1 font-mono">$ls ~/projects</h2>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="surface-card rounded-xl p-6 space-y-3">
+          <div class="text-xs font-mono text-mut">Browser Extension · 2026</div>
+          <h3 class="text-base font-semibold">USOS — Custom Browser Dashboard</h3>
+          <p class="text-xs text-sec leading-relaxed">
+            Modular browser dashboard extension integrating calendar management, live weather, system telemetry widgets, and media controls.
+          </p>
+        </div>
+
+        <div class="surface-card rounded-xl p-6 space-y-3">
+          <div class="text-xs font-mono text-mut">Self-Hosted Infrastructure · 2026</div>
+          <h3 class="text-base font-semibold">Personal Homelab & Media Server</h3>
+          <p class="text-xs text-sec leading-relaxed">
+            Deployment and management of a local homelab environment. Hosting various containerized self-hosted services, including a dedicated Jellyfin media streaming server and network administration tools.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ~/CERTS (EXACT UNMODIFIED PDF & PNG FILES) -->
+    <section id="certs" class="space-y-8 scroll-mt-24">
+      <div class="border-b border-sub pb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono text-mut uppercase tracking-wider">05 / Verified Credentials</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight mt-1 font-mono">$ls ~/certs</h2>
+        </div>
+        <p class="text-xs font-mono text-mut">Click any card to view or download the exact original certificate file</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- 1. Red Hat OpenShift DO188 -->
+        <div onclick="openRedHatModal()" class="surface-card rounded-2xl p-5 cursor-pointer group flex flex-col justify-between space-y-4">
+          <div class="space-y-4">
+            <div class="h-44 rounded-xl overflow-hidden surface-secondary flex items-center justify-center p-3 relative">
+              <img src="red-hat-openshift-development-i-introduction-to-con.2.png" alt="Red Hat DO188 Badge" class="max-h-full object-contain group-hover:scale-105 transition-transform" />
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/75 text-white text-[10px] font-mono">PDF + PNG</span>
+            </div>
+            <div>
+              <div class="text-xs font-mono text-mut">Red Hat · May 12, 2026</div>
+              <h3 class="text-sm font-semibold mt-1">OpenShift Dev I: Introduction to Containers with Podman (DO188)</h3>
+              <p class="text-xs text-sec mt-1">Ver. 4.18 · 24 Credit Hours · Verified on Credly</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sub flex items-center justify-between text-xs font-mono">
+            <span class="text-mut truncate">CourseAttendance20260512-32-ddrivo.pdf</span>
+            <span class="underline shrink-0 ml-2">Open File →</span>
+          </div>
+        </div>
+
+        <!-- 2. TryHackMe Pre Security -->
+        <div onclick="openFileModal('THM-PreSecurity.pdf', 'TryHackMe — Pre Security (THM-PreSecurity.pdf)', 'pdf')" class="surface-card rounded-2xl p-5 cursor-pointer group flex flex-col justify-between space-y-4">
+          <div class="space-y-4">
+            <div class="h-44 rounded-xl overflow-hidden surface-secondary relative">
+              <iframe src="THM-PreSecurity.pdf#toolbar=0&navpanes=0&scrollbar=0" class="w-full h-full pointer-events-none" title="TryHackMe Pre Security PDF"></iframe>
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/75 text-white text-[10px] font-mono">PDF</span>
+            </div>
+            <div>
+              <div class="text-xs font-mono text-mut">TryHackMe · April 24, 2026</div>
+              <h3 class="text-sm font-semibold mt-1">Pre Security Learning Path</h3>
+              <p class="text-xs text-sec mt-1">ID: THM-IVSLNUFRTY · 19 hours 10 minutes</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sub flex items-center justify-between text-xs font-mono">
+            <span class="text-mut truncate">THM-PreSecurity.pdf</span>
+            <span class="underline shrink-0 ml-2">Open PDF →</span>
+          </div>
+        </div>
+
+        <!-- 3. Elastic Security Suite (3 PDFs) -->
+        <div onclick="openElasticModal()" class="surface-card rounded-2xl p-5 cursor-pointer group flex flex-col justify-between space-y-4">
+          <div class="space-y-4">
+            <div class="h-44 rounded-xl overflow-hidden surface-secondary relative">
+              <iframe src="IntroToElasticSecurity.pdf#toolbar=0&navpanes=0&scrollbar=0" class="w-full h-full pointer-events-none" title="Elastic Security PDF"></iframe>
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/75 text-white text-[10px] font-mono">3 PDFs</span>
+            </div>
+            <div>
+              <div class="text-xs font-mono text-mut">Elastic Security · March 2026</div>
+              <h3 class="text-sm font-semibold mt-1">Intro, Detection Engine Basics & Alerts and Cases</h3>
+              <p class="text-xs text-sec mt-1">IDs: C163189, C166355 & C166456</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sub flex items-center justify-between text-xs font-mono">
+            <span class="text-mut truncate">3 Original Elastic PDFs</span>
+            <span class="underline shrink-0 ml-2">Open PDFs →</span>
+          </div>
+        </div>
+
+        <!-- 4. ANSSI SecNumacadémie -->
+        <!-- 4. ANSSI SecNumacadémie -->
+        <div onclick="openFileModal('AttestationSecNum.pdf', 'ANSSI — SecNumacadémie (AttestationSecNum.pdf)', 'pdf')" class="surface-card rounded-2xl p-5 cursor-pointer group flex flex-col justify-between space-y-4 lg:col-start-2">
+          <div class="space-y-4">
+            <div class="h-44 rounded-xl overflow-hidden surface-secondary relative">
+              <iframe src="AttestationSecNum.pdf#toolbar=0&navpanes=0&scrollbar=0" class="w-full h-full pointer-events-none" title="ANSSI SecNumacademie PDF"></iframe>
+              <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/75 text-white text-[10px] font-mono">PDF</span>
+            </div>
+            <div>
+              <div class="text-xs font-mono text-mut">ANSSI · October 29, 2024</div>
+              <h3 class="text-sm font-semibold mt-1">SecNumacadémie — MOOC SSI</h3>
+              <p class="text-xs text-sec mt-1">100.0% score across all 4 cybersecurity modules</p>
+            </div>
+          </div>
+          <div class="pt-3 border-t border-sub flex items-center justify-between text-xs font-mono">
+            <span class="text-mut truncate">AttestationSecNum.pdf</span>
+            <span class="underline shrink-0 ml-2">Open PDF →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-sub py-10">
+    <div class="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-mut">
+      <div>© 2026 Simon Ubbelohde (Cym0n) — Belgium</div>
+      <div class="flex items-center gap-5">
+        <a href="Ubbelohde%20Simon%20-%20CV.pdf" target="_blank" rel="noopener" class="hover:text-[var(--text-primary)]">CV</a>
+        <a href="https://www.linkedin.com/in/simon-ubbelohde/" target="_blank" rel="noopener" class="hover:text-[var(--text-primary)]">LinkedIn</a>
+        <a href="mailto:simon.ubbelohde@gmail.com" class="hover:text-[var(--text-primary)]">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL FOR VIEWING ORIGINAL PDF / PNG FILES UNMODIFIED -->
+  <div id="file-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 sm:p-6" onclick="if(event.target === this) closeFileModal()">
+    <div class="surface-card w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[88vh]">
+      <!-- Modal Header -->
+      <div class="px-5 py-3.5 border-b border-sub flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2.5 truncate">
+          <i data-lucide="file-check" class="w-4 h-4 text-sec shrink-0"></i>
+          <span id="modal-title" class="text-xs sm:text-sm font-mono font-medium truncate">Document</span>
+        </div>
+
+        <!-- Optional Sub-tabs (used for Red Hat & Elastic multiple files) -->
+        <div id="modal-tabs" class="hidden items-center gap-1.5 font-mono text-xs"></div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <a id="modal-open-link" href="#" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg surface-secondary text-xs font-mono hover:opacity-80 flex items-center gap-1.5">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Open in New Tab</span>
+          </a>
+          <a id="modal-download-link" href="#" download class="px-3 py-1.5 rounded-lg bg-[var(--text-primary)] text-[var(--bg-primary)] text-xs font-mono hover:opacity-90 flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Download</span>
+          </a>
+          <button onclick="closeFileModal()" class="p-1.5 rounded-lg surface-secondary text-sec hover:text-[var(--text-primary)]" aria-label="Close">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Content Container -->
+      <div id="modal-body" class="flex-1 bg-neutral-900 flex items-center justify-center overflow-auto"></div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+
+    function copyValue(text, message) {
+      navigator.clipboard.writeText(text);
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = message;
+      toast.classList.remove('opacity-0', 'translate-y-2');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+      }, 2200);
+    }
+
+    function renderFileInModal(fileUrl, title, type) {
+      const encodedUrl = encodeURI(fileUrl);
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-open-link').href = encodedUrl;
+      const dl = document.getElementById('modal-download-link');
+      dl.href = encodedUrl;
+      dl.setAttribute('download', fileUrl);
+
+      const body = document.getElementById('modal-body');
+      if (type === 'img') {
+        body.innerHTML = `<img src="${encodedUrl}" alt="${title}" class="max-w-full max-h-full object-contain p-4" />`;
+      } else {
+        body.innerHTML = `<iframe src="${encodedUrl}" class="w-full h-full border-0" title="${title}"></iframe>`;
+      }
+    }
+
+    function openFileModal(fileUrl, title, type) {
+      const tabs = document.getElementById('modal-tabs');
+      tabs.classList.add('hidden');
+      tabs.innerHTML = '';
+      renderFileInModal(fileUrl, title, type);
+      const modal = document.getElementById('file-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openRedHatModal() {
+      const tabs = document.getElementById('modal-tabs');
+      tabs.classList.remove('hidden');
+      tabs.classList.add('flex');
+      tabs.innerHTML = `
+        <button onclick="renderFileInModal('CourseAttendance20260512-32-ddrivo.pdf', 'Red Hat DO188 — Certificate (PDF)', 'pdf')" class="px-2.5 py-1 rounded surface-secondary hover:opacity-80">Certificate PDF</button>
+        <button onclick="renderFileInModal('red-hat-openshift-development-i-introduction-to-con.2.png', 'Red Hat DO188 — Badge (PNG)', 'img')" class="px-2.5 py-1 rounded surface-secondary hover:opacity-80">Badge PNG</button>
+        <a href="https://www.credly.com/badges/89c59d1e-e661-46e6-bfd1-c3e2c4aa1c4a" target="_blank" rel="noopener" class="px-2.5 py-1 rounded surface-secondary underline">Verify Credly ↗</a>
+      `;
+      renderFileInModal('CourseAttendance20260512-32-ddrivo.pdf', 'Red Hat DO188 — Certificate (PDF)', 'pdf');
+      const modal = document.getElementById('file-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function openElasticModal() {
+      const tabs = document.getElementById('modal-tabs');
+      tabs.classList.remove('hidden');
+      tabs.classList.add('flex');
+      tabs.innerHTML = `
+        <button onclick="renderFileInModal('IntroToElasticSecurity.pdf', 'Elastic — Intro to Elastic Security (C163189)', 'pdf')" class="px-2.5 py-1 rounded surface-secondary hover:opacity-80">1. Intro</button>
+        <button onclick="renderFileInModal('DetectionEngineBasics.pdf', 'Elastic — Detection Engine Basics (C166355)', 'pdf')" class="px-2.5 py-1 rounded surface-secondary hover:opacity-80">2. Detection</button>
+        <button onclick="renderFileInModal('AlertsAndCases.pdf', 'Elastic — Alerts and Cases (C166456)', 'pdf')" class="px-2.5 py-1 rounded surface-secondary hover:opacity-80">3. Alerts & Cases</button>
+      `;
+      renderFileInModal('IntroToElasticSecurity.pdf', 'Elastic — Intro to Elastic Security (C163189)', 'pdf');
+      const modal = document.getElementById('file-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeFileModal() {
+      const modal = document.getElementById('file-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.getElementById('modal-body').innerHTML = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFileModal();
+    });
+  </script>
+</body>
+</html>
